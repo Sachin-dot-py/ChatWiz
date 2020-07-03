@@ -28,3 +28,5 @@ TODO
 - Publish!
 
 Pull requests and issues are welcome!
+
+*__Disclaimer__*: WhatsApp is a registered trademark of WhatsApp Inc. This service is not related in any way to WhatsApp Inc.
