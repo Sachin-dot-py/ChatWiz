@@ -23,18 +23,30 @@ class WhatsAppAnalyzer():
         messages = []
         for line in lines:
             try:
+                media = False
                 date_str = line.split(' - ')[0]
                 contact = line.split(' - ')[1].split(':')[0]
                 message = line.split(':')[2].lstrip(' ')
+                if message == "<Media omitted>":
+                    media = True
+                    message = ""
                 date = datetime.strptime(date_str, "%d/%m/%Y, %I:%S %p")
+                words = len(message.split())
+                letters = len(message.replace(" ","").replace("\n", ""))
             except:  # For multi-line messages
                 prev_msg = messages[-1].get('message') + "\n"
-                messages[-1]['message'] = prev_msg + message
+                new_msg = prev_msg + line
+                messages[-1]['message'] = new_msg
+                messages[-1]['words'] = len(new_msg.split())
+                messages[-1]['letters'] = len(new_msg.replace(" ","").replace("\n", ""))
             else:
                 message_data = {
                     'contact': contact,
                     'date': date,
-                    'message': message
+                    'media' : media,
+                    'message': message,
+                    'words' : words,
+                    'letters' : letters
                 }
                 messages.append(message_data)
         df = pd.DataFrame(messages)
