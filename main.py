@@ -32,21 +32,22 @@ class WhatsAppAnalyzer():
                     message = ""
                 date = datetime.strptime(date_str, "%d/%m/%Y, %I:%S %p")
                 words = len(message.split())
-                letters = len(message.replace(" ","").replace("\n", ""))
+                letters = len(message.replace(" ", "").replace("\n", ""))
             except:  # For multi-line messages
                 prev_msg = messages[-1].get('message') + "\n"
                 new_msg = prev_msg + line
                 messages[-1]['message'] = new_msg
                 messages[-1]['words'] = len(new_msg.split())
-                messages[-1]['letters'] = len(new_msg.replace(" ","").replace("\n", ""))
+                messages[-1]['letters'] = len(
+                    new_msg.replace(" ", "").replace("\n", ""))
             else:
                 message_data = {
                     'contact': contact,
                     'date': date,
-                    'media' : media,
+                    'media': media,
                     'message': message,
-                    'words' : words,
-                    'letters' : letters
+                    'words': words,
+                    'letters': letters
                 }
                 messages.append(message_data)
         df = pd.DataFrame(messages)
@@ -80,6 +81,16 @@ class WhatsAppAnalyzer():
     def total_messages(self) -> int:
         """ Get total number of messages """
         return len(self.df)
+
+    @property
+    def total_words(self) -> int:
+        """ Get total number of words """
+        return self.df['words'].sum()
+
+    @property
+    def total_letters(self) -> int:
+        """ Get total number of letters """
+        return self.df['letters'].sum()
 
 
 if __name__ == "__main__":
