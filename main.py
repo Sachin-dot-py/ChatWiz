@@ -92,6 +92,12 @@ class WhatsAppAnalyzer():
         """ Get total number of letters """
         return self.df['letters'].sum()
 
+    @property
+    def total_media(self) -> int:
+        """ Gets total number of media """
+        media_filter = self.df['media'] == True
+        return len(self.df[media_filter])
+
 
 if __name__ == "__main__":
     file = 'sample_chat/sample_chat.txt'  # Chat data exported from WhatsApp

@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 from datetime import datetime
-from testconfig import TOTAL_DAYS, TOTAL_MESSAGES, FIRST_MESSAGE_DATE, LAST_MESSAGE_DATE, TOTAL_LETTERS, TOTAL_WORDS
+from testconfig import TOTAL_DAYS, TOTAL_MESSAGES, FIRST_MESSAGE_DATE, LAST_MESSAGE_DATE, TOTAL_LETTERS, TOTAL_WORDS, TOTAL_MEDIA
 
 # Append package directory to path to import modules
 PACKAGE_DIR = os.path.abspath(os.path.join(__file__, '../..'))
@@ -27,6 +27,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(self.wa.total_days, TOTAL_DAYS)
         self.assertEqual(self.wa.total_words, TOTAL_WORDS)
         self.assertEqual(self.wa.total_letters, TOTAL_LETTERS)
+        self.assertEqual(self.wa.total_media, TOTAL_MEDIA)
 
 
 if __name__ == "__main__":
