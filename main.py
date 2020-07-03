@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 
 
-def parseChat(content: str) -> pd.DataFrame:
+def parse_chat(content: str) -> pd.DataFrame:
     """ Parses content and returns a Dataframe with contact, datetime object and message """
     lines = content.splitlines()
     if "end-to-end encryption" in lines[0]:
@@ -26,12 +26,3 @@ def parseChat(content: str) -> pd.DataFrame:
             messages.append(message_data)
     df = pd.DataFrame(messages)
     return df
-
-
-if __name__ == "__main__":
-    file = 'wac.txt'  # Chat data exported from WhatsApp
-    with open(file) as f:
-        content = f.read()
-    df = parseChat(content)
-    df.to_csv(file.replace('.txt', '.csv'))
-    print(df)
