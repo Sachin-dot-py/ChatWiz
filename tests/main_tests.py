@@ -15,7 +15,7 @@ class TestMain(unittest.TestCase):
         with open(file) as f:
             content = f.read()
         df = parse_chat(content)
-        self.assertEqual(len(df), 8)  # Change this if sample chat is changed
+        self.assertEqual(len(df), 128)  # Change this if sample chat is changed
 
 
 if __name__ == "__main__":
