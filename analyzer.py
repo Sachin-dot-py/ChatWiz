@@ -33,7 +33,7 @@ class WhatsAppAnalyzer():
                 try:
                     message = line.split(':')[2].lstrip(' ')
                 except:
-                    continue # Automatic messages such as "XX person left", "XX added YY" etc.
+                    continue  # Automatic messages such as "XX person left", "XX added YY" etc.
                 if message == "<Media omitted>":
                     media = 1
                     message = ""
@@ -64,7 +64,6 @@ class WhatsAppAnalyzer():
         """ Parse dataframe to get user dataframe with count of messages, media and more per user """
         user_table = {k: table for k, table in self.df.groupby("contact")}
         return user_table
-
 
     @property
     def first_message_date(self) -> pd.Timestamp:
@@ -109,7 +108,7 @@ class WhatsAppAnalyzer():
     def total_media(self) -> int:
         """ Gets total number of media """
         return self.df['media'].sum()
-    
+
     def get_user(self, name) -> dict:
         """ Returns dict of statistics for the given user name """
         try:
@@ -122,7 +121,14 @@ class WhatsAppAnalyzer():
         messages = len(user) - media
         words_per_message = int(words / messages)
         letters_per_word = int(letters / words)
-        userdict = {'messages' : messages, 'media' : media, 'words' : words, 'letters' : letters, 'words_per_message' : words_per_message, 'letters_per_word' : letters_per_word}
+        userdict = {
+            'messages': messages,
+            'media': media,
+            'words': words,
+            'letters': letters,
+            'words_per_message': words_per_message,
+            'letters_per_word': letters_per_word
+        }
         return userdict
 
 
