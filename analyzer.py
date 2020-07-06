@@ -1,22 +1,24 @@
 import pandas as pd
 from datetime import datetime
+import re
 
 
 class WhatsAppAnalyzer():
     """ Analyze WhatsApp data and get statistics """
-    def __init__(self, content=None, df=None, file=None):
+    def __init__(self, file=None, content=None):
         """
-        Either content or dataframe is required
+        Either filename or file contents is required to initialise the class
         """
-        if df:
-            self.df = df
-        elif not content and not df and not file:
-            raise AssertionError("No Dataframe or content passed")
-        else:
-            if file:
-                with open(file) as f:
-                    content = f.read()
-            self.df = self.parse_chat(content)
+        if not file and not content:
+            raise AssertionError("No filename or content passed")
+        if file:
+            with open(file) as f:
+                content = f.read()
+        try:
+            self.name = re.search("(.*?)", content.splitlines()[1]).group()
+        except:
+            self.name = "WhatsApp Group"  # If the WhatsApp chat provided is not a group.
+        self.df = self.parse_chat(content)
         self.userdf = self.parse_user()
 
     def parse_chat(self, content) -> pd.DataFrame:
@@ -134,6 +136,4 @@ class WhatsAppAnalyzer():
 
 if __name__ == "__main__":
     file = 'sample_chat/sample_chat.txt'  # Chat data exported from WhatsApp
-    with open(file) as f:
-        content = f.read()
-    analyzer = WhatsAppAnalyzer(content)
+    analyzer = WhatsAppAnalyzer(file)

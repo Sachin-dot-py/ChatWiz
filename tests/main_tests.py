@@ -12,11 +12,9 @@ sys.path.append(PACKAGE_DIR)
 class TestMain(unittest.TestCase):
     def test_statistics(self):
         """ Test the parsing of the sample WhatsApp chat """
-        from main import WhatsAppAnalyzer
+        from analyzer import WhatsAppAnalyzer
         file = 'sample_chat/sample_chat.txt'  # Chat data exported from WhatsApp
-        with open(file) as f:
-            content = f.read()
-        self.wa = WhatsAppAnalyzer(content)
+        self.wa = WhatsAppAnalyzer(file)
         self.assertEqual(self.wa.total_messages, TOTAL_MESSAGES)
         self.assertEqual(
             self.wa.first_message_date,
