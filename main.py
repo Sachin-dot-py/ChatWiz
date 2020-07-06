@@ -4,16 +4,20 @@ from datetime import datetime
 
 class WhatsAppAnalyzer():
     """ Analyze WhatsApp data and get statistics """
-    def __init__(self, content=None, df=None):
+    def __init__(self, content=None, df=None, file=None):
         """
         Either content or dataframe is required
         """
         if df:
             self.df = df
-        elif not content and not df:
+        elif not content and not df and not file:
             raise AssertionError("No Dataframe or content passed")
         else:
+            if file:
+                with open(file) as f:
+                    content = f.read()
             self.df = self.parse_chat(content)
+        self.userdf = self.parse_user()
 
     def parse_chat(self, content) -> pd.DataFrame:
         """ Parses content and returns a Dataframe with contact, datetime object and message """
@@ -23,12 +27,15 @@ class WhatsAppAnalyzer():
         messages = []
         for line in lines:
             try:
-                media = False
+                media = 0
                 date_str = line.split(' - ')[0]
                 contact = line.split(' - ')[1].split(':')[0]
-                message = line.split(':')[2].lstrip(' ')
+                try:
+                    message = line.split(':')[2].lstrip(' ')
+                except:
+                    continue # Automatic messages such as "XX person left", "XX added YY" etc.
                 if message == "<Media omitted>":
-                    media = True
+                    media = 1
                     message = ""
                 date = datetime.strptime(date_str, "%d/%m/%Y, %I:%S %p")
                 words = len(message.split())
@@ -52,6 +59,12 @@ class WhatsAppAnalyzer():
                 messages.append(message_data)
         df = pd.DataFrame(messages)
         return df
+
+    def parse_user(self) -> dict:
+        """ Parse dataframe to get user dataframe with count of messages, media and more per user """
+        user_table = {k: table for k, table in self.df.groupby("contact")}
+        return user_table
+
 
     @property
     def first_message_date(self) -> pd.Timestamp:
@@ -95,8 +108,22 @@ class WhatsAppAnalyzer():
     @property
     def total_media(self) -> int:
         """ Gets total number of media """
-        media_filter = self.df['media'] == True
-        return len(self.df[media_filter])
+        return self.df['media'].sum()
+    
+    def get_user(self, name) -> dict:
+        """ Returns dict of statistics for the given user name """
+        try:
+            user = self.userdf[name]
+        except:
+            raise AssertionError(f"User {name} does not exist")
+        media = user['media'].sum()
+        words = user['words'].sum()
+        letters = user['letters'].sum()
+        messages = len(user) - media
+        words_per_message = int(words / messages)
+        letters_per_word = int(letters / words)
+        userdict = {'messages' : messages, 'media' : media, 'words' : words, 'letters' : letters, 'words_per_message' : words_per_message, 'letters_per_word' : letters_per_word}
+        return userdict
 
 
 if __name__ == "__main__":
