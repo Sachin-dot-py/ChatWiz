@@ -15,7 +15,7 @@ class WhatsAppAnalyzer():
             with open(file) as f:
                 content = f.read()
         try:
-            self.name = re.search("(.*?)", content.splitlines()[1]).group()
+            self.name = re.search(r'"(.*?)"', content.splitlines()[1]).group().strip(r'"')
         except:
             self.name = "WhatsApp Group"  # If the WhatsApp chat provided is not a group.
         self.df = self.parse_chat(content)
