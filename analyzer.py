@@ -4,18 +4,21 @@ import re
 
 
 class WhatsAppAnalyzer():
-    """ Analyze WhatsApp data and get statistics """
+    """ Analyze a WhatsApp chat and get statistics """
     def __init__(self, file=None, content=None):
         """
         Either filename or file contents is required to initialise the class
         """
+        self.file = None
         if not file and not content:
             raise AssertionError("No filename or content passed")
         if file:
+            self.file = file
             with open(file) as f:
                 content = f.read()
         try:
-            self.name = re.search(r'"(.*?)"', content.splitlines()[1]).group().strip(r'"')
+            self.name = re.search(r'"(.*?)"',
+                                  content.splitlines()[1]).group().strip(r'"')
         except:
             self.name = "WhatsApp Group"  # If the WhatsApp chat provided is not a group.
         self.df = self.parse_chat(content)
