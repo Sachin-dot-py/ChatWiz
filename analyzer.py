@@ -25,7 +25,7 @@ class WhatsAppAnalyzer():
             self.name = "WhatsApp Group"  # Default if unable to get chat name
         self.df = self.parse_chat(content)
         self.userdf = self.parse_user()
-        self.datedict = self.parse_date()
+        self.datedf = self.parse_date()
         self.daydf = self.parse_day()
         self.hourdf = self.parse_hour()
 
@@ -49,7 +49,7 @@ class WhatsAppAnalyzer():
                 if message == "<Media omitted>":
                     media = 1
                     message = ""
-                if message == "This message was deleted":
+                if message == "This message was deleted" or message == "You deleted this message":
                     deleted = 1
                     message = ""
                 timestamp = datetime.strptime(date_str, "%d/%m/%Y, %I:%M %p")
@@ -105,7 +105,7 @@ class WhatsAppAnalyzer():
     @property
     def most_active_date(self) -> tuple:
         """ Gets date which was most active (most number of messages) """
-        date, messages = next(iter(self.datedict.items()))
+        date, messages = next(iter(self.datedf.items()))
         date = date.strftime("%B %d, %Y")
         return (date, messages)
 

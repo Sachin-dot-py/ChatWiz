@@ -7,15 +7,15 @@ tests = {
         "START_DATE": "29/09/2019, 12:56 pm",
         "END_DATE": "03/07/2020, 4:32 pm",
         "TOTAL_DAYS": 278,
-        "TOTAL_WORDS": 735,
-        "TOTAL_LETTERS": 3922,
+        "TOTAL_WORDS": 731,
+        "TOTAL_LETTERS": 3901,
         "TOTAL_MEDIA": 106,
         "CHAT_NAME": 'WhatsApp Group',
         "MOST_ACTIVE_DATE": ('December 11, 2019', 31),
         "MOST_ACTIVE_DAY": 'Wednesday',
         "HIGHEST_MESSAGES": 'Sachin',
         "HIGHEST_WORDS": ('Sachin', 650),
-        "TOTAL_DELETED": 0,
+        "TOTAL_DELETED": 1,
         "AVERAGE_MESSAGES": 0
     }
 }
