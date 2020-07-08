@@ -12,7 +12,7 @@ class TestMain(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from testconfig import tests
-        from analyzer import WhatsAppAnalyzer
+        from whatsapp import WhatsAppAnalyzer
         cls.tests = {
             WhatsAppAnalyzer(file): expected_results
             for file, expected_results in tests.items()
