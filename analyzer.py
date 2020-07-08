@@ -44,7 +44,7 @@ class WhatsAppAnalyzer():
                 contact = line.split(' - ')[1].split(':')[0]
                 if len(line.split(":")) == 2:
                     system_message = True
-                    continue # Automatic messages such as "XX person left", "XX added YY" etc.
+                    continue  # Automatic messages such as "XX person left", "XX added YY" etc.
                 message = ":".join(line.split(':')[2:]).lstrip(' ')
                 if message == "<Media omitted>":
                     media = 1
@@ -53,7 +53,9 @@ class WhatsAppAnalyzer():
                     deleted = 1
                     message = ""
                 timestamp = datetime.strptime(date_str, "%d/%m/%Y, %I:%M %p")
-                date = datetime(year=timestamp.year, month=timestamp.month, day=timestamp.day)
+                date = datetime(year=timestamp.year,
+                                month=timestamp.month,
+                                day=timestamp.day)
                 day = timestamp.strftime("%A")
                 hour = timestamp.hour
                 words = len(message.split())
@@ -70,11 +72,11 @@ class WhatsAppAnalyzer():
                     message_data = {
                         'contact': contact,
                         'timestamp': timestamp,
-                        'date' : date,
+                        'date': date,
                         'day': day,
-                        'hour' : hour,
+                        'hour': hour,
                         'media': media,
-                        'deleted' : deleted,
+                        'deleted': deleted,
                         'message': message,
                         'words': words,
                         'letters': letters
@@ -193,7 +195,7 @@ class WhatsAppAnalyzer():
         userdict = {
             'messages': messages,
             'media': media,
-            'deleted' : deleted,
+            'deleted': deleted,
             'words': words,
             'letters': letters,
             'words_per_message': words_per_message,
