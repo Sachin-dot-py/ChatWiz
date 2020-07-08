@@ -29,7 +29,14 @@ class TestMain(unittest.TestCase):
                     "TOTAL_DAYS": wa.total_days,
                     "TOTAL_WORDS": wa.total_words,
                     "TOTAL_LETTERS": wa.total_letters,
-                    "TOTAL_MEDIA": wa.total_media
+                    "TOTAL_MEDIA": wa.total_media,
+                    "CHAT_NAME" : wa.name,
+                    "MOST_ACTIVE_DATE" : wa.most_active_date,
+                    "MOST_ACTIVE_DAY" : wa.most_active_day,
+                    "HIGHEST_MESSAGES" : wa.highest_messages,
+                    "HIGHEST_WORDS" : wa.highest_words,
+                    "TOTAL_DELETED" : wa.total_deleted,
+                    "AVERAGE_MESSAGES" : wa.average_messages
                 }
                 self.assertEqual(expected_results, results)
 
