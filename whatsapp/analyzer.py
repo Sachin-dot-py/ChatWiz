@@ -34,6 +34,7 @@ class WhatsAppAnalyzer():
         self.hourdf = self.parse_hour()
         self.worddf = self.parse_words()
         self.emojidf = self.parse_emojis()
+        self.messagedf = self.parse_messages()
 
     def parse_chat(self, content) -> pd.DataFrame:
         """ Parses content and returns a Dataframe with contact, datetime object and message """
@@ -134,6 +135,16 @@ class WhatsAppAnalyzer():
         emojis = list(self.df.emojis.sum())
         emojidf = Counter(emojis).most_common()
         return emojidf
+
+    def parse_messages(self) -> dict:
+        """ Parse dataframe to get a dictionary of number of messages per contact """
+        messagedf = {user: len(self.userdf[user]) for user in self.users}
+        return messagedf
+
+    @property
+    def users(self) -> list:
+        """ Get a list of users in the group """
+        return self.userdf.keys()
 
     @property
     def most_active_date(self) -> tuple:
