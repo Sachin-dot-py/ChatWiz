@@ -3,6 +3,8 @@
 import pandas as pd
 from datetime import datetime
 import re
+import emoji
+from collections import Counter
 
 
 class WhatsAppAnalyzer():
@@ -30,6 +32,8 @@ class WhatsAppAnalyzer():
         self.datedf = self.parse_date()
         self.daydf = self.parse_day()
         self.hourdf = self.parse_hour()
+        self.worddf = self.parse_words()
+        self.emojidf = self.parse_emojis()
 
     def parse_chat(self, content) -> pd.DataFrame:
         """ Parses content and returns a Dataframe with contact, datetime object and message """
@@ -54,6 +58,11 @@ class WhatsAppAnalyzer():
                 if message == "This message was deleted" or message == "You deleted this message":
                     deleted = 1
                     message = ""
+                emojis = emoji.emoji_lis(message)
+                if emojis:
+                    emojis = "".join([item['emoji'] for item in emojis])
+                else:
+                    emojis = ""
                 timestamp = datetime.strptime(date_str, "%d/%m/%Y, %I:%M %p")
                 date = datetime(year=timestamp.year,
                                 month=timestamp.month,
@@ -66,9 +75,16 @@ class WhatsAppAnalyzer():
                 prev_msg = messages[-1].get('message') + "\n"
                 new_msg = prev_msg + line
                 letters = len(new_msg.replace(" ", "").replace("\n", ""))
+                emojis = emoji.emoji_lis(new_msg)
+                if emojis:
+                    emojis = "".join([item['emoji'] for item in emojis])
+                else:
+                    emojis = ""
                 messages[-1]['message'] = new_msg
                 messages[-1]['words'] = len(new_msg.split())
                 messages[-1]['letters'] = letters
+                messages[-1]['emojis'] = emojis
+                messages[-1]['emoji_num'] = len(list(emojis))
             else:
                 if not system_message:
                     message_data = {
@@ -81,7 +97,9 @@ class WhatsAppAnalyzer():
                         'deleted': deleted,
                         'message': message,
                         'words': words,
-                        'letters': letters
+                        'letters': letters,
+                        'emojis': emojis,
+                        'emoji_num': len(list(emojis))
                     }
                     messages.append(message_data)
         df = pd.DataFrame(messages)
@@ -103,6 +121,19 @@ class WhatsAppAnalyzer():
     def parse_hour(self) -> dict:
         """ Parse dataframe to get a dictionary of number of messages by hour of the day """
         return dict(self.df['hour'].value_counts())
+
+    def parse_words(self) -> dict:  # TODO Remove stopwords
+        """ Parse dataframe to get dictionary with each word and its number of uses """
+        worddf = self.df.message.str.split(expand=True).stack()
+        worddf = worddf.str.lower().str.strip("(.-*!?_:')")
+        worddf = dict(worddf.value_counts())
+        return worddf
+
+    def parse_emojis(self) -> dict:
+        """ Parse dataframe to get a dictionary with each emoji and its number of uses """
+        emojis = list(self.df.emojis.sum())
+        emojidf = Counter(emojis).most_common()
+        return emojidf
 
     @property
     def most_active_date(self) -> tuple:
@@ -157,6 +188,11 @@ class WhatsAppAnalyzer():
         return len(self.df)
 
     @property
+    def total_emojis(self) -> int:
+        """ Get total number of emojis """
+        return self.df['emoji_num'].sum()
+
+    @property
     def total_words(self) -> int:
         """ Get total number of words """
         return self.df['words'].sum()
@@ -191,6 +227,9 @@ class WhatsAppAnalyzer():
         media = user['media'].sum()
         words = user['words'].sum()
         letters = user['letters'].sum()
+        emojis = user['emoji_num'].sum()
+        emoji_list = list(user.emojis.sum())
+        fav_emoji, num_uses = Counter(emoji_list).most_common()[0]
         messages = len(user) - media
         words_per_message = int(words / messages)
         letters_per_word = int(letters / words)
@@ -198,6 +237,8 @@ class WhatsAppAnalyzer():
             'messages': messages,
             'media': media,
             'deleted': deleted,
+            'emojis': emojis,
+            'fav_emoji': (fav_emoji, num_uses),
             'words': words,
             'letters': letters,
             'words_per_message': words_per_message,
