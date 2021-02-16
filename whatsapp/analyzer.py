@@ -5,6 +5,7 @@ from datetime import datetime
 import re
 import emoji
 from collections import Counter
+from wordcloud import WordCloud
 
 
 class WhatsAppAnalyzer():
@@ -222,6 +223,14 @@ class WhatsAppAnalyzer():
     def total_deleted(self) -> int:
         """ Gets the total number of deleted messages """
         return self.df['deleted'].sum()
+
+    @property
+    def wordcloud(self):
+        """ Creates and returns the wordcloud as a PIL image """
+        text = self.df.message.sum()
+        wordcloud = WordCloud().generate(text)
+        image = wordcloud.to_image()
+        return image
 
     @property
     def average_messages(self) -> int:
