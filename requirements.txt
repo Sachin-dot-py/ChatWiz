@@ -8,4 +8,4 @@ emoji == 1.2.0
 pandas == 1.2.2
 
 # WhatsappAnalyzer/setup.py: 2
-setuptools == 53.0.0
+setuptools == 65.5.1
