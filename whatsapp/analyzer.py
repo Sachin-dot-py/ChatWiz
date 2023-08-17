@@ -10,24 +10,11 @@ from wordcloud import WordCloud
 
 class WhatsAppAnalyzer():
     """ Analyze a WhatsApp chat and get statistics """
-    def __init__(self, file=None, content=None):
+    def __init__(self, content):
         """
         Either filename or file contents is required to initialise the class
         """
-        self.file = None
-        if not file and not content:
-            raise AssertionError("No filename or content passed")
-        if file:
-            self.file = file
-            with open(file) as f:
-                content = f.read()
-        try:
-            self.name = re.search(r'"(.*?)"',
-                                  content.splitlines()[1]).group().strip(r'"')
-        except:
-            if 'WhatsApp Chat with ' in file:
-                self.name = file.strip(".txt").split("WhatsApp Chat with ")[1]
-            self.name = "WhatsApp Group"  # Default if unable to get chat name
+        self.name = "Whatsapp Chat/Group"  # Default TODO
         self.df = self.parse_chat(content)
         self.userdf = self.parse_user()
         self.datedf = self.parse_date()
@@ -48,24 +35,26 @@ class WhatsAppAnalyzer():
                 system_message = False
                 media = 0
                 deleted = 0
-                date_str = line.split(' - ')[0]
-                contact = line.split(' - ')[1].split(':')[0]
-                if len(line.split(":")) == 2:
+                if ":" not in line:
                     system_message = True
                     continue  # Automatic messages such as "XX person left", "XX added YY" etc.
-                message = ":".join(line.split(':')[2:]).lstrip(' ')
-                if message == "<Media omitted>":
+
+                message = ":".join(line.split(':')[3:]).lstrip(' ')
+                date_str = line.split("]")[0].strip("[")
+                contact = line.split('] ')[1].split(':')[0]
+
+                if "omitted" in line:
                     media = 1
                     message = ""
-                if message == "This message was deleted" or message == "You deleted this message":
+                if "This message was deleted." in line or "You deleted this message." in line:
                     deleted = 1
                     message = ""
-                emojis = emoji.emoji_lis(message)
+                emojis = emoji.emoji_list(message)
                 if emojis:
                     emojis = "".join([item['emoji'] for item in emojis])
                 else:
                     emojis = ""
-                timestamp = datetime.strptime(date_str, "%d/%m/%Y, %I:%M %p")
+                timestamp = datetime.strptime(date_str, "%d/%m/%y, %I:%M:%S %p")
                 date = datetime(year=timestamp.year,
                                 month=timestamp.month,
                                 day=timestamp.day)
@@ -77,7 +66,7 @@ class WhatsAppAnalyzer():
                 prev_msg = messages[-1].get('message') + "\n"
                 new_msg = prev_msg + line
                 letters = len(new_msg.replace(" ", "").replace("\n", ""))
-                emojis = emoji.emoji_lis(new_msg)
+                emojis = emoji.emoji_list(new_msg)
                 if emojis:
                     emojis = "".join([item['emoji'] for item in emojis])
                 else:
@@ -224,12 +213,11 @@ class WhatsAppAnalyzer():
         """ Gets the total number of deleted messages """
         return self.df['deleted'].sum()
 
-    @property
     def wordcloud(self):
         """ Creates and returns the wordcloud as a PIL image """
         text = self.df.message.sum()
-        wordcloud = WordCloud().generate(text)
-        image = wordcloud.to_image()
+        wordcloud = WordCloud(collocations=False).generate(text)
+        image = wordcloud.to_svg()
         return image
 
     @property
