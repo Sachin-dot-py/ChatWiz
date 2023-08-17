@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <title>Whatsapp Analyzer</title>
     <style>
-    h1{
+h1{
     font-size: 30px;
   text-align: center;
-  }
-        .grid-container {
+}
+
+.grid-container {
   display: grid;
   grid-template-columns: auto auto auto;
   background-color: #2196F3;
   padding: 10px;
 }
+
 .grid-item {
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.8);
@@ -21,12 +23,14 @@
   font-size: 30px;
   text-align: center;
 }
+
 a {
   font-size: 22px;
   font-weight: 600;
   color: green;
   text-align: center;
 }
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -37,12 +41,15 @@ th, td {
   padding: 8px;
 }
 
-tr:nth-child(even){background-color: #f2f2f2}
+tr:nth-child(even){
+    background-color: #f2f2f2
+}
 
 th {
   background-color: #04AA6D;
   color: white;
 }
+
 * {
   box-sizing: border-box;
 }
@@ -74,54 +81,51 @@ th {
     <div class="grid-item"><b>Total Deleted Messages</b><br><i>{{ analysis.total_deleted }}</i></div>
     <div class="grid-item"><b>Average Daily Messages</b><br><i>{{ analysis.average_messages }}</i></div>
 </div>
-<br><br>
+<br><br><br>
 <center>
-    <br>
-    <div id="wordcloud">{{ wordcloud }}</div>
-    Wordcloud for your chat
-    </center>
+<div id="wordcloud">{{ wordcloud }}</div>
+Wordcloud for your chat
+</center>
 <br><br>
 
 <div class="row">
   <div class="column">
     <h1>Most used words</h1>
 
-<table>
-  <tr>
-    <th>Word</th>
-    <th>Frequency</th>
-  </tr>
-    {% for word in worddf %}
-  <tr>
-    <td>{{ word[0] }}</td>
-    <td>{{ word[1] }}</td>
-  </tr>
-    {% endfor %}
-</tr>
-</table>
+    <table>
+      <tr>
+        <th>Word</th>
+        <th>Frequency</th>
+      </tr>
+        {% for word in worddf %}
+      <tr>
+        <td>{{ word[0] }}</td>
+        <td>{{ word[1] }}</td>
+      </tr>
+        {% endfor %}
+    </table>
   </div>
   <div class="column">
     <h1>Most used emojis</h1>
-<table>
-  <tr>
-    <th>Emoji</th>
-    <th>Frequency</th>
-  </tr>
-    {% for emoji in emojidf %}
-  <tr>
-    <td>{{ emoji[0] }}</td>
-    <td>{{ emoji[1] }}</td>
-  </tr>
-    {% endfor %}
-</tr>
-</table>
+    <table>
+      <tr>
+        <th>Emoji</th>
+        <th>Frequency</th>
+      </tr>
+        {% for emoji in emojidf %}
+      <tr>
+        <td>{{ emoji[0] }}</td>
+        <td>{{ emoji[1] }}</td>
+      </tr>
+        {% endfor %}
+    </table>
   </div>
-    </div>
+</div>
 <center>
-    <br><br>
-    <a href="/whatsapp">Upload a new chat</a>
-    <br><br>
-    <a href="https://github.com/Sachin-dot-py/ChatWiz">Source Code on GitHub</a>
+<br><br>
+<a href="/whatsapp">Upload a new chat</a>
+<br><br>
+<a href="https://github.com/Sachin-dot-py/ChatWiz">Source Code on GitHub</a>
 </center>
 <br><br>
 <footer> <small>&copy; Copyright 2023, Sachin Ramanathan</small> </footer>

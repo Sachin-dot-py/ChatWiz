@@ -12,7 +12,7 @@ def index():
         return render_template("whatsapp_index.html")
     else:
         file = request.files['chat']
-        name = file.filename.split(".zi")[0].split(" - ")[1]
+        name = file.filename.split(".zip")[0].split(" - ")[1]
         file_like_object = file.stream._file
         zipfile_ob = zipfile.ZipFile(file_like_object)
         file_names = zipfile_ob.namelist()

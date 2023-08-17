@@ -7,7 +7,7 @@ from collections import Counter
 from wordcloud import WordCloud
 
 
-class WhatsAppAnalyzer():
+class WhatsAppAnalyzer:
     """ Analyze a WhatsApp chat and get statistics """
     def __init__(self, content):
         """
@@ -119,7 +119,7 @@ class WhatsAppAnalyzer():
         worddf = dict(worddf.value_counts())
         return worddf
 
-    def parse_emojis(self) -> dict:
+    def parse_emojis(self) -> list[tuple]:
         """ Parse dataframe to get a dictionary with each emoji and its number of uses """
         emojis = list(self.df.emojis.sum())
         emojidf = Counter(emojis).most_common()
@@ -133,7 +133,7 @@ class WhatsAppAnalyzer():
     @property
     def users(self) -> list:
         """ Get a list of users in the group """
-        return self.userdf.keys()
+        return list(self.userdf.keys())
 
     @property
     def most_active_date(self) -> tuple:
@@ -153,7 +153,7 @@ class WhatsAppAnalyzer():
         return self.df['contact'].mode()[0]
 
     @property
-    def highest_words(self) -> str:
+    def highest_words(self) -> tuple:
         """ Get name of user who has sent the longest message (highest number of words) """
         highest = self.df.iloc[self.df['words'].argmax()]
         return (highest['contact'], highest['words'])
