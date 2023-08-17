@@ -1,11 +1,8 @@
-# WhatsApp Chat Analyzer
+# ChatWiz
 
 ## About
 
-*WhatsApp Chat Analyzer* is a program that you can use to get statistics on your WhatsApp personal chats / group chats.
+*ChatWiz* is a web app that you can use to view interesting statistics on your WhatsApp personal chats / group chats.
 
-Still a work in progress.
+Privacy Note: The app is open-source and fully safe to use with no data stored in the web server.
 
-Pull requests and issues are welcome!
-
-*__Disclaimer__*: WhatsApp is a registered trademark of WhatsApp Inc. This service is not related in any way to WhatsApp Inc.

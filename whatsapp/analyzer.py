@@ -2,7 +2,6 @@
 
 import pandas as pd
 from datetime import datetime
-import re
 import emoji
 from collections import Counter
 from wordcloud import WordCloud
@@ -14,7 +13,7 @@ class WhatsAppAnalyzer():
         """
         Either filename or file contents is required to initialise the class
         """
-        self.name = "Whatsapp Chat/Group"  # Default TODO
+        self.name = "Whatsapp Chat/Group"  # Default TODO Capture Chat/Group Name
         self.df = self.parse_chat(content)
         self.userdf = self.parse_user()
         self.datedf = self.parse_date()
@@ -253,8 +252,3 @@ class WhatsAppAnalyzer():
             'letters_per_word': letters_per_word
         }
         return userdict
-
-
-if __name__ == "__main__":
-    file = 'sample_chat/sample_chat.txt'  # Chat data exported from WhatsApp
-    wa = WhatsAppAnalyzer(file)

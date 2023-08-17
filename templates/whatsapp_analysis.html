@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Whatsapp Analyzer</title>
+    <style>
+    h1{
+    font-size: 30px;
+  text-align: center;
+  }
+        .grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: #2196F3;
+  padding: 10px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+a {
+  font-size: 22px;
+  font-weight: 600;
+  color: green;
+  text-align: center;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #04AA6D;
+  color: white;
+}
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+}
+
+/* Create two equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 10px;
+}
+    </style>
+</head>
+<body>
+<h1>Chat with {{ name }}</h1>
+<div class="grid-container">
+    <div class="grid-item"><b>Most Frequent Messager</b><br><i>{{ analysis.highest_messages }}</i></div>
+    <div class="grid-item"><b>Most Active Date</b><br><i>{{ analysis.most_active_date[0] }}, {{ analysis.most_active_date[1] }} messages</i></div>
+    <div class="grid-item"><b>Most Active Day of the Week</b><br><i>{{ analysis.most_active_day }}</i></div>
+    <div class="grid-item"><b>Who sent the Longest Message?</b><br><i>{{ analysis.highest_words[0] }}, {{ analysis.highest_words[1] }} words</i></div>
+    <div class="grid-item"><b>Lifetime of Chat</b><br><i>{{ analysis.total_days }} days</i></div>
+    <div class="grid-item"><b>Total Messages Sent</b><br><i>{{ analysis.total_messages }}</i></div>
+    <div class="grid-item"><b>Total Emojis Sent</b><br><i>{{ analysis.total_emojis }}</i></div>
+    <div class="grid-item"><b>Total Words Sent</b><br><i>{{ analysis.total_words }}</i></div>
+    <div class="grid-item"><b>Total Letters Sent</b><br><i>{{ analysis.total_letters }}</i></div>
+    <div class="grid-item"><b>Total Media (inc. Stickers) Sent</b><br><i>{{ analysis.total_media }}</i></div>
+    <div class="grid-item"><b>Total Deleted Messages</b><br><i>{{ analysis.total_deleted }}</i></div>
+    <div class="grid-item"><b>Average Daily Messages</b><br><i>{{ analysis.average_messages }}</i></div>
+</div>
+<br><br>
+<center>
+    <br>
+    <div id="wordcloud">{{ wordcloud }}</div>
+    Wordcloud for your chat
+    </center>
+<br><br>
+
+<div class="row">
+  <div class="column">
+    <h1>Most used words</h1>
+
+<table>
+  <tr>
+    <th>Word</th>
+    <th>Frequency</th>
+  </tr>
+    {% for word in worddf %}
+  <tr>
+    <td>{{ word[0] }}</td>
+    <td>{{ word[1] }}</td>
+  </tr>
+    {% endfor %}
+</tr>
+</table>
+  </div>
+  <div class="column">
+    <h1>Most used emojis</h1>
+<table>
+  <tr>
+    <th>Emoji</th>
+    <th>Frequency</th>
+  </tr>
+    {% for emoji in emojidf %}
+  <tr>
+    <td>{{ emoji[0] }}</td>
+    <td>{{ emoji[1] }}</td>
+  </tr>
+    {% endfor %}
+</tr>
+</table>
+  </div>
+    </div>
+<center>
+    <br><br>
+    <a href="/whatsapp">Upload a new chat</a>
+    <br><br>
+    <a href="https://github.com/Sachin-dot-py/ChatWiz">Source Code on GitHub</a>
+</center>
+<br><br>
+<footer> <small>&copy; Copyright 2023, Sachin Ramanathan</small> </footer>
+</body>
+</html>
