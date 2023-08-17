@@ -13,7 +13,7 @@ class WhatsAppAnalyzer:
         """
         Either filename or file contents is required to initialise the class
         """
-        self.name = "Whatsapp Chat/Group"  # Default TODO Capture Chat/Group Name
+        self.name = "Whatsapp Chat/Group"
         self.df = self.parse_chat(content)
         self.userdf = self.parse_user()
         self.datedf = self.parse_date()
@@ -26,7 +26,7 @@ class WhatsAppAnalyzer:
     def parse_chat(self, content) -> pd.DataFrame:
         """ Parses content and returns a Dataframe with contact, datetime object and message """
         lines = content.splitlines()
-        if "end-to-end encryption" in lines[0]:
+        if "end-to-end encrypted" in lines[0]:
             lines.pop(0)  # Remove message about end-to-end encryption
         messages = []
         for line in lines:
@@ -34,18 +34,18 @@ class WhatsAppAnalyzer:
                 system_message = False
                 media = 0
                 deleted = 0
-                if ":" not in line:
+                if "voice call" in line or "video call" in line or "changed" in line:
                     system_message = True
-                    continue  # Automatic messages such as "XX person left", "XX added YY" etc.
+                    continue  # Automatic system messages by WhatsApp - to be excluded
 
                 message = ":".join(line.split(':')[3:]).lstrip(' ')
-                date_str = line.split("]")[0].strip("[")
+                date_str = line.split("]")[0].strip("\u200e").strip("[")
                 contact = line.split('] ')[1].split(':')[0]
 
-                if "omitted" in line:
+                if "omitted" in line or ".com" in line or "http" in line:
                     media = 1
                     message = ""
-                if "This message was deleted." in line or "You deleted this message." in line:
+                if "This message was deleted" in line or "You deleted this message." in line:
                     deleted = 1
                     message = ""
                 emojis = emoji.emoji_list(message)
@@ -213,9 +213,10 @@ class WhatsAppAnalyzer:
         return self.df['deleted'].sum()
 
     def wordcloud(self):
-        """ Creates and returns the wordcloud as a PIL image """
-        text = self.df.message.sum()
-        wordcloud = WordCloud(collocations=False).generate(text)
+        """ Creates and returns the wordcloud as an image """
+        new = self.df.message.apply(lambda msg: msg + " ")
+        text = new.sum()
+        wordcloud = WordCloud(collocations=False, width=950, height=475, min_word_length=2).generate(text)
         image = wordcloud.to_svg()
         return image
 

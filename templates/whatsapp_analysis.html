@@ -5,7 +5,7 @@
     <title>Whatsapp Analyzer</title>
     <style>
 h1{
-    font-size: 30px;
+  font-size: 30px;
   text-align: center;
 }
 
@@ -69,15 +69,15 @@ th {
 <h1>Chat with {{ name }}</h1>
 <div class="grid-container">
     <div class="grid-item"><b>Most Frequent Messager</b><br><i>{{ analysis.highest_messages }}</i></div>
-    <div class="grid-item"><b>Most Active Date</b><br><i>{{ analysis.most_active_date[0] }}, {{ analysis.most_active_date[1] }} messages</i></div>
+    <div class="grid-item"><b>Most Active Date</b><br><i>{{ analysis.most_active_date[0] }} ({{ analysis.most_active_date[1] }} messages)</i></div>
     <div class="grid-item"><b>Most Active Day of the Week</b><br><i>{{ analysis.most_active_day }}</i></div>
     <div class="grid-item"><b>Who sent the Longest Message?</b><br><i>{{ analysis.highest_words[0] }}, {{ analysis.highest_words[1] }} words</i></div>
     <div class="grid-item"><b>Lifetime of Chat</b><br><i>{{ analysis.total_days }} days</i></div>
     <div class="grid-item"><b>Total Messages Sent</b><br><i>{{ analysis.total_messages }}</i></div>
     <div class="grid-item"><b>Total Emojis Sent</b><br><i>{{ analysis.total_emojis }}</i></div>
     <div class="grid-item"><b>Total Words Sent</b><br><i>{{ analysis.total_words }}</i></div>
-    <div class="grid-item"><b>Total Letters Sent</b><br><i>{{ analysis.total_letters }}</i></div>
-    <div class="grid-item"><b>Total Media (inc. Stickers) Sent</b><br><i>{{ analysis.total_media }}</i></div>
+    <div class="grid-item"><b>Total Characters Sent</b><br><i>{{ analysis.total_letters }}</i></div>
+    <div class="grid-item"><b>Total Media Sent</b><br><i>{{ analysis.total_media }}</i></div>
     <div class="grid-item"><b>Total Deleted Messages</b><br><i>{{ analysis.total_deleted }}</i></div>
     <div class="grid-item"><b>Average Daily Messages</b><br><i>{{ analysis.average_messages }}</i></div>
 </div>
