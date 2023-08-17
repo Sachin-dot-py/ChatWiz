@@ -21,7 +21,7 @@ def index():
         content = [zipfile_ob.open(name).read() for name in file_names][0]
         content = content.decode("utf-8")
         analysis = WhatsAppAnalyzer(content=content)
-        return render_template("whatsapp_analysis.html", analysis=analysis, emojidf=list(analysis.emojidf[:20]), worddf=list(analysis.worddf.items())[:20], wordcloud=Markup(analysis.wordcloud()), name=name)
+        return render_template("whatsapp_analysis.html", analysis=analysis, emojidf=list(analysis.emojidf[:20]), worddf=list(analysis.worddf.items())[:20], wordcloud=Markup(analysis.wordcloud()), timeline=Markup(analysis.timeline()), name=name)
 
 
 if __name__ == '__main__':

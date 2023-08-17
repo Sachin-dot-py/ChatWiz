@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 
 import pandas as pd
+import matplotlib.pyplot as plt
 from datetime import datetime
 import emoji
+import io
 from collections import Counter
 from wordcloud import WordCloud
+from matplotlib.dates import DateFormatter, date2num
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
 
 
 class WhatsAppAnalyzer:
@@ -219,6 +224,25 @@ class WhatsAppAnalyzer:
         wordcloud = WordCloud(collocations=False, width=950, height=475, min_word_length=2).generate(text)
         image = wordcloud.to_svg()
         return image
+
+    def timeline(self):
+        """ Creates and returns a plot of Number of Messages vs Date as an image """
+        message_counts = self.df.groupby('date').size()
+        dates = date2num(message_counts.index)
+
+        plt.figure(figsize=(9, 7))
+        plt.bar(dates, message_counts, color='skyblue', width=2)
+        plt.title('Messages Timeline')
+        plt.ylabel('Number of Messages')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        ax = plt.gca()
+        ax.xaxis.set_major_formatter(DateFormatter("%b %d, %y"))
+
+        f = io.StringIO()
+        plt.savefig(f, format="svg")
+
+        return f.getvalue()  # SVG String for Rendering on Webpage
 
     @property
     def average_messages(self) -> int:

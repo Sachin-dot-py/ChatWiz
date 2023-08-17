@@ -2,3 +2,4 @@ emoji
 wordcloud
 pandas
 flask
+matplotlib
